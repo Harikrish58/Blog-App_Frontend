@@ -7,6 +7,9 @@ import { app } from "../Firebase";
 import { signInSuccess, signInFailure } from "../Redux/Slice/userSlice";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
+// Get API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
+
 // OAuth component to handle Google sign-in
 const OAuth = () => {
   const auth = getAuth(app); // Initialize Firebase Auth
@@ -25,7 +28,7 @@ const OAuth = () => {
       const result = await signInWithPopup(auth, provider);
 
       // Send user details to backend
-      const res = await fetch("http://localhost:5000/api/auth/googleauth", {
+      const res = await fetch(`${API}/auth/googleauth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,4 +1,10 @@
-import { Alert, Button, ModalBody, ModalHeader, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  ModalBody,
+  ModalHeader,
+  TextInput,
+} from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -22,6 +28,9 @@ import {
 import { Modal } from "flowbite-react"; // Modal for delete confirmation
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Link } from "react-router-dom"; // For navigation
+
+// Get API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
 
 const DashboardProfile = () => {
   // Redux dispatch and selector hooks
@@ -124,7 +133,8 @@ const DashboardProfile = () => {
     try {
       dispatch(updateStart());
       const response = await fetch(
-        `http://localhost:5000/api/user/update/${user._id}`,
+        `${API}/user/update/${user._id}`,
+
         {
           method: "PUT",
           headers: {
@@ -161,7 +171,8 @@ const DashboardProfile = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/user/delete/${user._id}`,
+        `${API}/user/delete/${user._id}`,
+
         {
           method: "DELETE",
           headers: {

@@ -9,6 +9,9 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../Components/OAuth";
 
+// Get API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const Signup = () => {
   // State management for form data, loading state, and error messages
   const [formData, setFormData] = useState({});
@@ -30,14 +33,11 @@ const Signup = () => {
     try {
       setLoading(true);
       setErrorMessage(null);
-      const response = await fetch(
-        "http://localhost:5000/api/auth/register-user",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API}/auth/register-user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       const data = await response.json();
       if (data.success === false) {
         return setErrorMessage(data.message);

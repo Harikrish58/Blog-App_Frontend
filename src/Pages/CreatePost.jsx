@@ -13,6 +13,9 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
+// Get API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const CreatePost = () => {
   // State initialization for form data, errors, file upload, etc.
   const [file, setFile] = useState(null); // Store the selected image file
@@ -68,17 +71,15 @@ const CreatePost = () => {
     }
     try {
       // Post data to the backend API
-      const response = await fetch(
-        "http://localhost:5000/api/post/createpost",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-          body: JSON.stringify({ ...formData, content: formData.content }),
-        }
-      );
+      const response = await fetch(`${API}/post/createpost`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ ...formData, content: formData.content }),
+      });
+
       const data = await response.json();
       if (!response.ok) {
         setPublishError(data.message || "Error publishing post.");

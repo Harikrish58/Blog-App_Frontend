@@ -3,6 +3,9 @@ import { Avatar, Badge, Card } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+// Get API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const SingleBlog = () => {
   const { id } = useParams(); // Extract the blog ID from the URL parameters
   const [blog, setBlog] = useState(null); // State to hold blog data
@@ -14,16 +17,13 @@ const SingleBlog = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/post/getpost/${id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              token: localStorage.getItem("token"), // Get token for authentication
-            },
-          }
-        );
+        const res = await fetch(`${API}/post/getpost/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        });
         const data = await res.json();
         if (data && data.result) {
           setBlog(data.result); // Set blog data if available

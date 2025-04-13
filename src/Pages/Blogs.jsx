@@ -3,60 +3,58 @@ import { Card, Avatar, Badge, Alert } from "flowbite-react";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-const Blogs = () => {
-  // State initialization
-  const Navigate = useNavigate();
-  const [blogs, setBlogs] = useState([]); // Stores the list of blogs
-  const [searchParams] = useSearchParams(); // To get search query from URL
-  const search = searchParams.get("search") || ""; // Search query parameter
-  const [error, setError] = useState(null); // Stores error messages
-  const [loading, setLoading] = useState(true); // Manages loading state
+// Load API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
 
-  // Fetch blog data when search query changes
+const Blogs = () => {
+  const Navigate = useNavigate();
+  const [blogs, setBlogs] = useState([]);
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchdata(search);
   }, [search]);
 
-  // Fetch blog data from API
   const fetchdata = async (query) => {
     setLoading(true);
     setError(null);
     try {
       const url = query
-        ? `http://localhost:5000/api/post/getallposts?search=${query}` // URL with search query
-        : "http://localhost:5000/api/post/getallposts"; // URL without search query
+        ? `${API}/post/getallposts?search=${query}`
+        : `${API}/post/getallposts`;
+
       const res = await fetch(url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          token: localStorage.getItem("token"), // Use token for authenticated API calls
+          token: localStorage.getItem("token"),
         },
       });
       const data = await res.json();
       if (data && Array.isArray(data.result)) {
-        setBlogs(data.result); // Store the fetched blogs in state
+        setBlogs(data.result);
       } else {
-        setBlogs([]); // In case result is not an array
+        setBlogs([]);
       }
     } catch (error) {
-      setBlogs([]); // Handle error by clearing the blog list
-      setError("Something went wrong. Please try again."); // Set error message
+      setBlogs([]);
+      setError("Something went wrong. Please try again.");
     } finally {
-      setLoading(false); // Set loading state to false after the fetch completes
+      setLoading(false);
     }
   };
 
-  // Navigate to individual blog page when clicked
   const handleClick = (id) => {
     Navigate(`/blogs/${id}`);
   };
 
-  // Show loading message if data is still being fetched
   if (loading) {
     return <p className="text-center py-8 dark:text-white">Loading...</p>;
   }
 
-  // Show error message if there was an issue fetching the data
   if (error) {
     return (
       <Alert color="failure" className="mb-4 dark:bg-gray-800 dark:text-white">
@@ -72,7 +70,6 @@ const Blogs = () => {
           Latest Blog Posts
         </h1>
 
-        {/* If search query exists, display it */}
         {search && (
           <Alert
             color="info"
@@ -82,7 +79,6 @@ const Blogs = () => {
           </Alert>
         )}
 
-        {/* Display list of blog cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blogs.map((blog, index) => (
             <Card
@@ -102,8 +98,7 @@ const Blogs = () => {
                   </Badge>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     <CalendarIcon className="w-4 h-4 inline mr-1" />
-                    {new Date(blog.createdAt).toLocaleDateString()}{" "}
-                    {/* Display blog creation date */}
+                    {new Date(blog.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <h5 className="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -117,7 +112,7 @@ const Blogs = () => {
                     rounded={true}
                     size="xs"
                     alt="user avatar"
-                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" // Placeholder for user avatar
+                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     Hari krishnan
@@ -128,7 +123,6 @@ const Blogs = () => {
           ))}
         </div>
 
-        {/* Display message if no blogs are found */}
         {blogs.length === 0 && search && !loading && !error && (
           <Alert
             color="info"
