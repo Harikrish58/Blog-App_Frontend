@@ -6,8 +6,8 @@ DevHub is a full-stack blog platform built using the **MERN stack**, integrated 
 
 ## 📸 Live Demo
 
->   
->  
+> ------------------
+> -----------------
 
 ---
 
@@ -44,6 +44,7 @@ DevHub is a full-stack blog platform built using the **MERN stack**, integrated 
 - ⚙️ Role-based access (admin/user)
 
 ---
+
 ## 📮 API Endpoints
 
 | Method | Endpoint                          | Description                          | Protected |
@@ -57,7 +58,6 @@ DevHub is a full-stack blog platform built using the **MERN stack**, integrated 
 | GET    | `/api/post/getallposts?search=`   | Fetch all posts or search by keyword | ✅        |
 | GET    | `/api/post/getpost/:id`           | Fetch single post by ID              | ✅        |
 
-
 ---
 
 ## ⚙️ Installation & Running Locally
@@ -68,11 +68,3 @@ DevHub is a full-stack blog platform built using the **MERN stack**, integrated 
 cd Frontend_Blog
 npm install
 npm run dev
-
-### 🖥️ Backend
-
-```bash
-cd Backend_Blog
-npm install
-npm run dev
-
