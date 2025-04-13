@@ -6,8 +6,7 @@ DevHub is a full-stack blog platform built using the **MERN stack**, integrated 
 
 ## 📸 Live Demo
 
-> ------------------
-> -----------------
+>https://devhub-blogapp.netlify.app/
 
 ---
 
