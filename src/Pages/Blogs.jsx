@@ -23,8 +23,8 @@ const Blogs = () => {
     setError(null);
     try {
       const url = query
-        ? `${API}/post/getallposts?search=${query}`
-        : `${API}/post/getallposts`;
+        ? `${API}/api/post/getallposts?search=${query}`
+        : `${API}/api/post/getallposts`;
 
       const res = await fetch(url, {
         method: "GET",

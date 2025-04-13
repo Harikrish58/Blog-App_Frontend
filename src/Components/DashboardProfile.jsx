@@ -133,7 +133,7 @@ const DashboardProfile = () => {
     try {
       dispatch(updateStart());
       const response = await fetch(
-        `${API}/user/update/${user._id}`,
+        `${API}/api/user/update/${user._id}`,
 
         {
           method: "PUT",
@@ -171,7 +171,7 @@ const DashboardProfile = () => {
 
     try {
       const response = await fetch(
-        `${API}/user/delete/${user._id}`,
+        `${API}/api/user/delete/${user._id}`,
 
         {
           method: "DELETE",

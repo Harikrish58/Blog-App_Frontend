@@ -10,6 +10,9 @@ import {
 } from "../Redux/Slice/userSlice";
 import OAuth from "../Components/OAuth"; // Import Google OAuth component
 
+// Load API base URL from environment variable
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const Signin = () => {
   const [formData, setFormData] = useState({}); // Track form data (email and password)
   const { loading, error: errorMessage } = useSelector((state) => state.user); // Redux states for loading and error
@@ -32,7 +35,7 @@ const Signin = () => {
     try {
       dispatch(signInStart()); // Set loading state in Redux
       const response = await fetch(
-        "http://localhost:5000/api/auth/signin-user",
+        `${API}/api/auth/signin-user`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

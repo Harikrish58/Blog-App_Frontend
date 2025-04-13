@@ -17,7 +17,7 @@ const SingleBlog = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API}/post/getpost/${id}`, {
+        const res = await fetch(`${API}/api/post/getpost/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

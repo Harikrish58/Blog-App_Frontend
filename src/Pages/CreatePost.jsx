@@ -71,7 +71,7 @@ const CreatePost = () => {
     }
     try {
       // Post data to the backend API
-      const response = await fetch(`${API}/post/createpost`, {
+      const response = await fetch(`${API}/api/post/createpost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
