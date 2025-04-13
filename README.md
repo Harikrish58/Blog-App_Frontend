@@ -1,12 +1,78 @@
-# React + Vite
+# 🚀 DevHub — Blog Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DevHub is a full-stack blog platform built using the **MERN stack**, integrated with **Firebase for image uploads**, **JWT authentication**, and a sleek, responsive UI powered by **Tailwind CSS** and **Flowbite-React**. It includes dark mode support, admin post creation, search filtering, user profile management, and Google OAuth login.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📸 Live Demo
 
-## Expanding the ESLint configuration
+>   
+>  
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+### ✅ Frontend:
+- **React** + **Vite**
+- **Tailwind CSS** + **Flowbite-React**
+- **React Router**
+- **Redux Toolkit** with **Redux Persist**
+- **React Quill** for rich text editing
+- **Firebase Storage** for image upload
+- **Google OAuth** (Firebase Auth)
+
+### ✅ Backend:
+- **Express.js**
+- **MongoDB** + **Mongoose**
+- **JWT** for authentication
+- **bcryptjs** for password hashing
+- **Dotenv**, **CORS**, **cookie-parser**
+
+---
+
+## ✨ Features
+
+- 🔐 User Authentication (JWT-based)
+- 🔒 Protected & Admin-only Routes
+- 📚 Post CRUD (Create Post for Admin only)
+- 🔍 Search Posts by Title, Content, or Category
+- 🌙 Dark/Light Theme with toggle
+- 📸 Profile Picture Upload (Firebase)
+- 🧠 Google OAuth Authentication
+- 📋 About Page & Responsive Design
+- ⚙️ Role-based access (admin/user)
+
+---
+## 📮 API Endpoints
+
+| Method | Endpoint                          | Description                          | Protected |
+|--------|-----------------------------------|--------------------------------------|-----------|
+| POST   | `/api/auth/register-user`         | Register new user                    | ❌        |
+| POST   | `/api/auth/signin-user`           | Sign in with email/password          | ❌        |
+| POST   | `/api/auth/googleauth`            | Sign in with Google                  | ❌        |
+| PUT    | `/api/user/update/:id`            | Update user profile                  | ✅        |
+| DELETE | `/api/user/delete/:id`            | Delete user account                  | ✅        |
+| POST   | `/api/post/createpost`            | Create new post (Admin only)         | ✅        |
+| GET    | `/api/post/getallposts?search=`   | Fetch all posts or search by keyword | ✅        |
+| GET    | `/api/post/getpost/:id`           | Fetch single post by ID              | ✅        |
+
+
+---
+
+## ⚙️ Installation & Running Locally
+
+### 🖥️ Frontend
+
+```bash
+cd Frontend_Blog
+npm install
+npm run dev
+
+### 🖥️ Backend
+
+```bash
+cd Backend_Blog
+npm install
+npm run dev
+
