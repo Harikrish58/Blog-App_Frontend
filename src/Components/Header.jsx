@@ -18,6 +18,7 @@ const Header = () => {
   const [searchError, setSearchError] = useState(null); // State for handling search errors
   const [isMobileSearchOpen, setMobileSearchOpen] = useState(false); // State to toggle mobile search visibility
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Add state to check if the user is logged in
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to toggle the profile dropdown visibility
 
   // Check if user is logged in
   useEffect(() => {
@@ -61,6 +62,26 @@ const Header = () => {
     setSearch(""); // Clear search input when toggling search visibility
     setSearchError(null); // Clear search error
   };
+
+  // Toggle Profile Dropdown Visibility
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown visibility
+  };
+
+  // Close the dropdown if clicked outside
+  const closeDropdown = (e) => {
+    if (!e.target.closest(".profile-dropdown")) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  // Add event listener for clicking outside of the dropdown
+  useEffect(() => {
+    document.addEventListener("click", closeDropdown);
+    return () => {
+      document.removeEventListener("click", closeDropdown);
+    };
+  }, []);
 
   return (
     <header className="bg-white text-black dark:bg-black dark:text-white shadow-md">
@@ -177,37 +198,39 @@ const Header = () => {
 
           {/* Profile/Sign In Button */}
           {user ? (
-            <div className="relative">
-              <button className="flex items-center">
+            <div className="relative profile-dropdown">
+              <button className="flex items-center" onClick={toggleDropdown}>
                 <img
                   src={user.profilePicture}
                   alt="User Avatar"
                   className="w-10 h-10 rounded-full"
                 />
               </button>
-              <div className="absolute right-0 w-48 mt-2 bg-white border border-gray-300 shadow-lg rounded-lg z-10 dark:bg-gray-800 dark:border-gray-600">
-                <div className="p-4">
-                  <span className="block text-sm">{user.username}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {user.email}
-                  </span>
-                </div>
-                <Link to="/dashboard?tab=profile">
-                  <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                    Profile
+              {isDropdownOpen && (
+                <div className="absolute right-0 w-48 mt-2 bg-white border border-gray-300 shadow-lg rounded-lg z-10 dark:bg-gray-800 dark:border-gray-600">
+                  <div className="p-4">
+                    <span className="block text-sm">{user.username}</span>
+                    <span className="block truncate text-sm font-medium">
+                      {user.email}
+                    </span>
+                  </div>
+                  <Link to="/dashboard?tab=profile">
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                      Profile
+                    </button>
+                  </Link>
+                  <div className="border-t border-gray-300 dark:border-gray-600"></div>
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      window.location.href = "/signin"; // Redirect to sign-in page
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Sign Out
                   </button>
-                </Link>
-                <div className="border-t border-gray-300 dark:border-gray-600"></div>
-                <button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    window.location.href = "/signin"; // Redirect to sign-in page
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >
-                  Sign Out
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           ) : (
             <Link to="/signin">
