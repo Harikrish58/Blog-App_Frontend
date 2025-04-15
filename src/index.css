@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@plugin "flowbite-react/plugin/tailwindcss";
-@source "../.flowbite-react/class-list.json";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  @apply bg-white text-black dark:bg-black dark:text-white;
+html.dark {
+  @apply bg-black text-yellow-300;
 }

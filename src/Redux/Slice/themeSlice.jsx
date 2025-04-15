@@ -1,26 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Initial state: Sets the initial theme from localStorage or defaults to "light"
+// Initial state for theme (dark/light), using localStorage to persist user preference
 const initialState = {
-  theme: localStorage.getItem("theme") || "light", // Stores the user's theme preference (light or dark)
+  theme: localStorage.getItem("theme") || "light",
 };
 
-// Creating slice for theme management (Redux Toolkit)
+// Redux slice to manage theme toggling (light ↔ dark)
 const themeSlice = createSlice({
-  name: "theme", // Slice name
-  initialState, // Initial state for theme (light/dark)
+  name: "theme", // Name of the slice
+  initialState, // Initial theme state
   reducers: {
-    // Action to toggle between light and dark theme
+    // Reducer to toggle theme mode
     toggleTheme: (state) => {
-      // Switches theme between light and dark, stores the new theme in localStorage
+      // Toggle theme value
       state.theme = state.theme === "light" ? "dark" : "light";
-      localStorage.setItem("theme", state.theme); // Store the current theme in localStorage
+
+      // Persist theme in localStorage
+      localStorage.setItem("theme", state.theme);
     },
   },
 });
 
-// Export the action created by createSlice (toggleTheme)
+// Export action to use in components
 export const { toggleTheme } = themeSlice.actions;
 
-// Export the reducer for use in the store
+// Export reducer to add to the Redux store
 export default themeSlice.reducer;

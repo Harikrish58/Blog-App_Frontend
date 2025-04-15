@@ -1,74 +1,71 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Initial state: Contains user data, loading state, and any error messages.
+// Initial state for user management: user data, loading state, and error messages
 const initialState = {
-  user: null, // Holds user data (null until user is signed in)
-  error: null, // Stores any errors related to user actions (e.g., sign-in failure)
-  loading: false, // Tracks whether an async action is in progress
+  user: null,     // Holds logged-in user data
+  error: null,    // Stores any error message related to user actions
+  loading: false, // Indicates if an async operation is in progress
 };
 
-// Creating slice for user management (sign-in, update, sign-out, delete)
+// Redux slice for managing user authentication and profile actions
 const userSlice = createSlice({
-  name: "user", // Slice name for user state management
-  initialState, // Initial state setup
+  name: "user", // Name of the slice
+  initialState, // Default state
   reducers: {
-    // Action to set loading state to true and reset error
+    // ===== Sign In Actions =====
     signInStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    // Action for successful sign-in, stores user data and clears error
     signInSuccess: (state, action) => {
       state.loading = false;
-      state.user = action.payload; // Action payload contains user data
+      state.user = action.payload;
       state.error = null;
     },
-    // Action for failed sign-in, sets error and resets loading state
     signInFailure: (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Action payload contains error message
+      state.error = action.payload;
     },
-    // Action to set loading state to true and reset error during update
+
+    // ===== Update User Actions =====
     updateStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    // Action for successful update, updates user data and clears error
     updateSuccess: (state, action) => {
       state.loading = false;
-      state.user = action.payload; // Action payload contains updated user data
+      state.user = action.payload;
       state.error = null;
     },
-    // Action for failed update, sets error and resets loading state
     updateFailure: (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Action payload contains error message
+      state.error = action.payload;
     },
-    // Action for successful sign-out, clears user data and error
+
+    // ===== Sign Out Action =====
     signOutSuccess: (state) => {
       state.user = null;
       state.error = null;
     },
-    // Action to set loading state to true and reset error during delete
+
+    // ===== Delete User Actions =====
     deleteStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    // Action for successful deletion, clears user data and resets error
     deleteSuccess: (state) => {
       state.loading = false;
       state.user = null;
       state.error = null;
     },
-    // Action for failed deletion, sets error and resets loading state
     deleteFailure: (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Action payload contains error message
+      state.error = action.payload;
     },
   },
 });
 
-// Exporting the actions for use in components
+// Exporting Redux actions for use in components
 export const {
   signInStart,
   signInSuccess,
@@ -82,5 +79,5 @@ export const {
   deleteFailure,
 } = userSlice.actions;
 
-// Exporting the reducer to be used in the store
+// Exporting reducer to be added to the Redux store
 export default userSlice.reducer;

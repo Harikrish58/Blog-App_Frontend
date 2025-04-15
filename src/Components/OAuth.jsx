@@ -1,4 +1,6 @@
-import { Button } from "flowbite-react";
+// OAuth.jsx
+// Google sign-in component using Firebase and Redux
+
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
@@ -7,16 +9,14 @@ import { app } from "../Firebase";
 import { signInSuccess, signInFailure } from "../Redux/Slice/userSlice";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-// Get API base URL from environment variable
 const API = import.meta.env.VITE_API_BASE_URL;
 
-// OAuth component to handle Google sign-in
 const OAuth = () => {
-  const auth = getAuth(app); // Initialize Firebase Auth
-  const dispatch = useDispatch(); // Redux dispatch
-  const navigate = useNavigate(); // React Router navigation
+  const auth = getAuth(app);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Function to handle Google sign-in
+  // Handle Google Sign-In logic
   const handleSubmit = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
@@ -24,10 +24,9 @@ const OAuth = () => {
     });
 
     try {
-      // Trigger sign-in with Google
       const result = await signInWithPopup(auth, provider);
 
-      // Send user details to backend
+      // Send Google user info to backend
       const res = await fetch(`${API}/api/auth/googleauth`, {
         method: "POST",
         headers: {
@@ -42,28 +41,26 @@ const OAuth = () => {
 
       const data = await res.json();
       if (res.ok) {
-        // On success, store token and navigate
         localStorage.setItem("token", data.token);
         dispatch(signInSuccess(data.result));
         navigate("/");
       }
     } catch (error) {
-      // Handle errors and dispatch failure
       dispatch(signInFailure(error.message));
     }
   };
 
   return (
+    // Google OAuth Button
     <div>
-      {/* Google sign-in button */}
-      <Button
+      <button
         type="button"
-        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:bg-gradient-to-l focus:ring-4 focus:ring-purple-200 dark:focus:ring-purple-800"
         onClick={handleSubmit}
+        className="flex items-center justify-center w-full px-4 py-2 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-pink-500 hover:to-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800"
       >
         <FcGoogle className="w-6 h-6 mr-2" />
         Continue with Google
-      </Button>
+      </button>
     </div>
   );
 };

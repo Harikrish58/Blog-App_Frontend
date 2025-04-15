@@ -1,93 +1,81 @@
-import React, { useEffect, useState } from "react"; // Import React and hooks for component lifecycle
-import {
-  Sidebar,
-  SidebarItem,
-  SidebarItemGroup,
-  SidebarItems,
-} from "flowbite-react"; // Import Flowbite components for Sidebar
-import {
-  HiArrowSmRight,
-  HiDocument,
-  HiDocumentAdd,
-  HiUser,
-} from "react-icons/hi"; // Import icons from react-icons
-import { Link, useLocation } from "react-router-dom"; // Import router functions to handle routing
-import { useDispatch } from "react-redux"; // Import dispatch to interact with Redux store
-import { signOutSuccess } from "../Redux/Slice/userSlice"; // Import action for user sign-out from Redux slice
-import { useSelector } from "react-redux"; // Import selector to get state from Redux store
+// DashboardSidebar.jsx
+// React component for displaying sidebar in the dashboard
+// Shows profile link, create post (for admins), and sign out
 
-// Sidebar component for user dashboard with links for profile, create post, and sign out
-const DashoboardSidebar = () => {
-  // Get user state from Redux store
+import React, { useEffect, useState } from "react";
+import { HiArrowSmRight, HiDocumentAdd, HiUser } from "react-icons/hi";
+import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutSuccess } from "../Redux/Slice/userSlice";
+
+const DashboardSidebar = () => {
+  // Access user from Redux state
   const { user } = useSelector((state) => state.user);
-  // Initialize location and dispatch hooks
+
+  // React Router location hook
   const location = useLocation();
+
+  // Redux dispatch
   const dispatch = useDispatch();
 
-  // State to track the active tab (profile or create-post)
+  // Track the current active tab
   const [tab, setTab] = useState("");
 
-  // Effect hook to update active tab based on URL query parameters
+  // Extract tab from URL and set it on component mount or change
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search); // Parse URL parameters
-    const tabUrl = urlParams.get("tab"); // Get 'tab' parameter from URL
-    if (tabUrl) {
-      setTab(tabUrl); // Set the active tab based on URL
-    } else {
-      setTab("profile"); // Default tab is 'profile'
-    }
-  }, [location.search]); // Re-run effect when location.search changes
+    const urlParams = new URLSearchParams(location.search);
+    const tabUrl = urlParams.get("tab");
+    setTab(tabUrl || "profile");
+  }, [location.search]);
 
   return (
-    // Sidebar container component with styling for dark and light themes
-    <Sidebar
-      aria-label="Sidebar with multi-level dropdown example" // Aria label for accessibility
-      className="h-screen w-64 bg-white text-black dark:bg-gray-900 dark:text-white"
-    >
-      <SidebarItems className="flex flex-col gap-2">
-        <SidebarItemGroup className="flex flex-col gap-2">
-          {/* Profile section */}
-          <SidebarItem
-            as={Link}
-            to="/dashboard?tab=profile" // Link to Profile tab
-            active={tab === "profile"} // Make the item active when 'profile' tab is selected
-            icon={HiUser} // Profile icon
-            className="cursor-pointer dark:hover:bg-gray-700 dark:text-white"
-            label={user.isAdmin ? "Admin" : "User"} // Display 'Admin' or 'User' based on the user role
-            labelColor="dark" // Set the label color to dark
-          >
-            Profile
-          </SidebarItem>
+    // Sidebar container
+    <aside className="h-screen w-64 bg-white text-black dark:bg-gray-900 dark:text-white shadow-md p-4">
+      {/* Sidebar navigation */}
+      <nav className="flex flex-col gap-4">
+        {/* Profile navigation link */}
+        <Link
+          to="/dashboard?tab=profile"
+          className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${
+            tab === "profile" ? "bg-gray-200 dark:bg-gray-700" : ""
+          }`}
+        >
+          <HiUser className="text-xl" />
+          <span>Profile</span>
+          {/* Display user role badge */}
+          <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-gray-300 dark:bg-gray-700">
+            {user.isAdmin ? "Admin" : "User"}
+          </span>
+        </Link>
 
-          {/* Conditional link to Create Post page, only shown for admins */}
-          {user.isAdmin && (
-            <SidebarItem
-              as={Link}
-              to="/create-post"
-              active={tab === "create-post"}
-              icon={HiDocumentAdd} // Icon for Create Post
-              className="cursor-pointer dark:hover:bg-gray-700 dark:text-white"
-            >
-              Create Post
-            </SidebarItem>
-          )}
-
-          {/* Sign Out button */}
-          <SidebarItem
-            icon={HiArrowSmRight} // Sign-out icon
-            className="cursor-pointer dark:hover:bg-gray-700 dark:text-white"
-            onClick={() => {
-              dispatch(signOutSuccess()); // Dispatch sign-out action
-              localStorage.removeItem("token"); // Remove token from localStorage
-              window.location.href = "/signin"; // Redirect to sign-in page
-            }}
+        {/* Create Post navigation link (visible only to admins) */}
+        {user.isAdmin && (
+          <Link
+            to="/create-post"
+            className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${
+              tab === "create-post" ? "bg-gray-200 dark:bg-gray-700" : ""
+            }`}
           >
-            Sign Out
-          </SidebarItem>
-        </SidebarItemGroup>
-      </SidebarItems>
-    </Sidebar>
+            <HiDocumentAdd className="text-xl" />
+            <span>Create Post</span>
+          </Link>
+        )}
+
+        {/* Sign out button */}
+        <button
+          onClick={() => {
+            dispatch(signOutSuccess());
+            localStorage.removeItem("token");
+            window.location.href = "/signin";
+          }}
+          className="flex items-center gap-3 px-3 py-2 rounded-md transition-all cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full"
+        >
+          <HiArrowSmRight className="text-xl" />
+          <span>Sign Out</span>
+        </button>
+      </nav>
+    </aside>
   );
 };
 
-export default DashoboardSidebar;
+export default DashboardSidebar;

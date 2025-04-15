@@ -1,20 +1,24 @@
+// ThemeProvider.jsx
+// Global theme provider to apply dark or light mode to the application
+
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-// ThemeProvider component to manage dark/light mode based on Redux state
 const ThemeProvider = ({ children }) => {
-  const { theme } = useSelector((state) => state.theme); // Get the current theme from Redux
+  // Access the current theme ('dark' or 'light') from Redux state
+  const { theme } = useSelector((state) => state.theme);
 
   useEffect(() => {
-    // Update the <html> element's class to reflect the current theme (dark or light)
+    // Add or remove the 'dark' class from <html> based on current theme
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [theme]); // Re-run the effect whenever the theme state changes
+  }, [theme]);
 
-  return children; // Render the children (wrapped components) with the applied theme
+  // Render all wrapped children inside this provider
+  return children;
 };
 
 export default ThemeProvider;

@@ -1,10 +1,6 @@
-import {
-  Alert,
-  Button,
-  ModalBody,
-  ModalHeader,
-  TextInput,
-} from "flowbite-react";
+// DashboardProfile.jsx
+// React component for displaying and editing user profile
+
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,9 +9,9 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../Firebase"; // Firebase app
+import { app } from "../Firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css"; // Circular progress bar
+import "react-circular-progressbar/dist/styles.css";
 import {
   deleteFailure,
   deleteStart,
@@ -24,20 +20,16 @@ import {
   updateFailure,
   updateStart,
   updateSuccess,
-} from "../Redux/Slice/userSlice"; // Redux actions for user state
-import { Modal } from "flowbite-react"; // Modal for delete confirmation
+} from "../Redux/Slice/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { Link } from "react-router-dom"; // For navigation
+import { Link } from "react-router-dom";
 
-// Get API base URL from environment variable
 const API = import.meta.env.VITE_API_BASE_URL;
 
 const DashboardProfile = () => {
-  // Redux dispatch and selector hooks
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.user);
 
-  // Local state for handling image, form data, and errors
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -49,17 +41,14 @@ const DashboardProfile = () => {
   const [deleteUserModal, setDeleteUserModal] = useState(false);
   const [deleteUserError, setDeleteUserError] = useState(false);
 
-  // File picker reference for selecting the profile image
   const filePickerRef = useRef();
 
   useEffect(() => {
-    // Automatically upload image if it is set
     if (imageFile) {
       uploadimage();
     }
   }, [imageFile]);
 
-  // Handle image upload to Firebase storage
   const uploadimage = async () => {
     setImageFileUploading(true);
     setImageFileUploadError(null);
@@ -76,7 +65,7 @@ const DashboardProfile = () => {
         );
         setImageFileUploadProgress(progress.toFixed(0));
       },
-      (error) => {
+      () => {
         setImageFileUploadError(
           "Could not upload image, File size must be less than 2MB"
         );
@@ -95,7 +84,6 @@ const DashboardProfile = () => {
     );
   };
 
-  // Handle image file change (on file input)
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.size < 2000000) {
@@ -106,15 +94,10 @@ const DashboardProfile = () => {
     }
   };
 
-  // Handle changes in form fields (name, email, password)
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // Handle the form submission for updating the user profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdateUserError(null);
@@ -132,18 +115,14 @@ const DashboardProfile = () => {
 
     try {
       dispatch(updateStart());
-      const response = await fetch(
-        `${API}/api/user/update/${user._id}`,
-
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API}/api/user/update/${user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
@@ -163,23 +142,18 @@ const DashboardProfile = () => {
     }
   };
 
-  // Handle user account deletion
   const handleDeleteUser = async () => {
     setDeleteUserError(null);
     setDeleteUserModal(false);
     dispatch(deleteStart());
 
     try {
-      const response = await fetch(
-        `${API}/api/user/delete/${user._id}`,
-
-        {
-          method: "DELETE",
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        }
-      );
+      const response = await fetch(`${API}/api/user/delete/${user._id}`, {
+        method: "DELETE",
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      });
       const data = await response.json();
       if (response.ok) {
         dispatch(deleteSuccess(data.result));
@@ -197,11 +171,11 @@ const DashboardProfile = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-gray-100 text-black dark:bg-gray-900 dark:text-white">
-      {/* Title and Profile Update Form */}
       <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
         User Profile
       </h1>
 
+      {/* Profile Update Form */}
       <form
         className="mt-4 flex flex-col items-center justify-center"
         onSubmit={handleSubmit}
@@ -231,88 +205,82 @@ const DashboardProfile = () => {
                   left: "50%",
                   transform: "translate(-50%, -50%)",
                 },
-                path: { stroke: `#4f46e5,${imageFileUploadProgress / 100}` },
               }}
             />
           )}
-          <div>
-            <img
-              src={imageFileUrl || user.profilePicture}
-              alt="Profile"
-              className={`w-24 h-24 rounded-full border-2 border-gray-300 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity ${
-                imageFileUploadProgress ? "opacity-50" : "opacity-100"
-              }`}
-              onClick={() => filePickerRef.current.click()}
-            />
-          </div>
+          <img
+            src={imageFileUrl || user.profilePicture}
+            alt="Profile"
+            className={`w-24 h-24 rounded-full border-2 border-gray-300 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity ${
+              imageFileUploadProgress ? "opacity-50" : "opacity-100"
+            }`}
+            onClick={() => filePickerRef.current.click()}
+          />
         </div>
 
-        {/* Image Upload Error */}
+        {/* Upload Error */}
         {imageFileUploadError && (
-          <Alert
-            color="failure"
-            className="mt-2 w-64 dark:bg-gray-800 dark:text-white"
-          >
-            <span>{imageFileUploadError}</span>
-          </Alert>
+          <div className="bg-red-100 text-red-800 text-sm px-4 py-2 mt-2 w-64 rounded dark:bg-red-800 dark:text-white">
+            {imageFileUploadError}
+          </div>
         )}
 
-        {/* Form Inputs: Username, Email, Password */}
+        {/* Form Inputs */}
         <div className="mb-4 w-64">
-          <TextInput
+          <input
             type="text"
             id="username"
             placeholder="Name"
             value={formData.username || user.username || ""}
             onChange={handleChange}
-            className="mt-2 bg-white dark:bg-gray-800 dark:text-white"
+            className="mt-2 w-full px-3 py-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white"
           />
-          <TextInput
+          <input
             type="email"
             id="email"
             placeholder="Email"
             value={formData.email || user.email || ""}
             onChange={handleChange}
-            className="mt-2 bg-white dark:bg-gray-800 dark:text-white"
+            className="mt-2 w-full px-3 py-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white"
           />
-          <TextInput
+          <input
             type="password"
             id="password"
             placeholder="**********"
             value={formData.password || ""}
             onChange={handleChange}
-            className="mt-2 bg-white dark:bg-gray-800 dark:text-white"
+            className="mt-2 w-full px-3 py-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-black dark:text-white"
           />
-          <Button
+          <button
             type="submit"
-            className="mt-4 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800"
             disabled={loading || imageFileUploading}
+            className="mt-4 w-full px-4 py-2 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-pink-500 hover:to-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 disabled:opacity-50"
           >
             {loading ? "Loading..." : "Update"}
-          </Button>
+          </button>
         </div>
 
-        {/* Create Post Button for Admin */}
+        {/* Admin Create Post Button */}
         {user.isAdmin && (
-          <Link to="/create-post">
-            <Button className="w-64 mt-4 bg-gradient-to-r from-green-500 to-blue-500 text-white hover:bg-gradient-to-l focus:ring-green-200 dark:focus:ring-green-800">
+          <Link to="/create-post" className="w-64">
+            <button className="w-full px-4 py-2 rounded bg-gradient-to-r from-green-500 to-blue-500 text-white hover:from-blue-500 hover:to-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800">
               Create Post
-            </Button>
+            </button>
           </Link>
         )}
       </form>
 
-      {/* Delete and Sign Out Buttons */}
+      {/* Delete + Logout */}
       <div className="w-64">
-        <Button
-          className="mt-4 w-full !bg-red-500 text-white hover:!bg-red-600 focus:ring-red-200 dark:focus:ring-red-800"
+        <button
+          className="mt-4 w-full px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-800"
           onClick={() => setDeleteUserModal(true)}
         >
-          <HiOutlineExclamationCircle className="mr-2" />
+          <HiOutlineExclamationCircle className="inline-block mr-2" />
           Delete Account
-        </Button>
-        <Button
-          className="mt-4 w-full !bg-gray-500 text-white hover:!bg-gray-600 focus:ring-gray-200 dark:focus:ring-gray-800"
+        </button>
+        <button
+          className="mt-4 w-full px-4 py-2 rounded bg-gray-500 text-white hover:bg-gray-600 focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-800"
           onClick={() => {
             dispatch(signOutSuccess());
             localStorage.removeItem("token");
@@ -320,66 +288,53 @@ const DashboardProfile = () => {
           }}
         >
           Sign Out
-        </Button>
+        </button>
       </div>
 
-      {/* Error Messages */}
+      {/* Update Feedback */}
       {updateUserError && (
-        <Alert
-          color="failure"
-          className="mt-2 w-64 dark:bg-gray-800 dark:text-white"
-        >
-          <span>{updateUserError}</span>
-        </Alert>
+        <div className="bg-red-100 text-red-800 text-sm px-4 py-2 mt-2 w-64 rounded dark:bg-red-800 dark:text-white">
+          {updateUserError}
+        </div>
       )}
       {updateUserSuccess && (
-        <Alert
-          color="success"
-          className="mt-2 w-64 dark:bg-gray-800 dark:text-white"
-        >
-          <span>{updateUserSuccess}</span>
-        </Alert>
+        <div className="bg-green-100 text-green-800 text-sm px-4 py-2 mt-2 w-64 rounded dark:bg-green-800 dark:text-white">
+          {updateUserSuccess}
+        </div>
       )}
 
-      {/* Modal for User Deletion */}
-      <Modal
-        show={deleteUserModal}
-        onClose={() => setDeleteUserModal(false)}
-        size="md"
-        popup={true}
-        dismissible={true}
-      >
-        <ModalHeader />
-        <ModalBody>
-          <div className="text-center">
+      {/* Modal for Delete Confirmation */}
+      {deleteUserModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            <h3 className="mb-5 text-lg font-normal text-center text-gray-500 dark:text-gray-400">
               Are you sure you want to delete this Account?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button
-                className="!bg-red-500 hover:!bg-red-600 focus:!ring-red-200 dark:focus:!ring-red-800 text-white"
+              <button
+                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-800"
                 onClick={handleDeleteUser}
               >
-                <HiOutlineExclamationCircle className="mr-2" />
-                {"Yes, I'm sure"}
-              </Button>
-              <Button color="gray" onClick={() => setDeleteUserModal(false)}>
+                <HiOutlineExclamationCircle className="inline-block mr-2" />
+                Yes, I'm sure
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                onClick={() => setDeleteUserModal(false)}
+              >
                 No, cancel
-              </Button>
+              </button>
             </div>
           </div>
-        </ModalBody>
-      </Modal>
+        </div>
+      )}
 
-      {/* Delete User Error */}
+      {/* Delete Error */}
       {deleteUserError && (
-        <Alert
-          color="failure"
-          className="mt-2 w-64 dark:bg-gray-800 dark:text-white"
-        >
-          <span>{deleteUserError}</span>
-        </Alert>
+        <div className="bg-red-100 text-red-800 text-sm px-4 py-2 mt-2 w-64 rounded dark:bg-red-800 dark:text-white">
+          {deleteUserError}
+        </div>
       )}
     </div>
   );
