@@ -1,6 +1,6 @@
 # 🚀 DevHub — Blog Application
 
-DevHub is a full-stack blog platform built using the **MERN stack**, integrated with **Firebase for image uploads**, **JWT authentication**, and a sleek, responsive UI powered by **Tailwind CSS** and **Flowbite-React**. It includes dark mode support, admin post creation, search filtering, user profile management, and Google OAuth login.
+DevHub is a full-stack blog platform built using the **MERN stack**, integrated with **Firebase for image uploads**, **JWT authentication**, and a sleek, responsive UI powered by **Tailwind CSS**. It includes dark mode support, admin post creation, search filtering, user profile management, and Google OAuth login.
 
 ---
 
@@ -14,7 +14,7 @@ DevHub is a full-stack blog platform built using the **MERN stack**, integrated 
 
 ### ✅ Frontend:
 - **React** + **Vite**
-- **Tailwind CSS** + **Flowbite-React**
+- **Tailwind CSS**
 - **React Router**
 - **Redux Toolkit** with **Redux Persist**
 - **React Quill** for rich text editing
