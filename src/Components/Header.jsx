@@ -1,24 +1,24 @@
 // Importing required libraries and hooks
-import React, { useState, useEffect } from "react";
-import { FaMoon, FaSun } from "react-icons/fa";
-import { AiOutlineSearch } from "react-icons/ai";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { signOutSuccess } from "../Redux/Slice/userSlice";
-import { toggleTheme } from "../Redux/Slice/themeSlice";
+import React, { useState, useEffect } from "react"; // React core and hooks
+import { FaMoon, FaSun, FaBars } from "react-icons/fa"; // Theme toggle and hamburger menu icon
+import { AiOutlineSearch } from "react-icons/ai"; // Search icon
+import { useSelector, useDispatch } from "react-redux"; // Redux state management
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Routing
+import { signOutSuccess } from "../Redux/Slice/userSlice"; // Redux slice for user
+import { toggleTheme } from "../Redux/Slice/themeSlice"; // Redux slice for theme
 
 const Header = () => {
-  const path = useLocation().pathname; // Get current route
+  const path = useLocation().pathname; // Current route path
   const dispatch = useDispatch(); // Redux dispatch
   const navigate = useNavigate(); // React Router navigation
 
   const { user } = useSelector((state) => state.user); // Get user from Redux
   const { theme } = useSelector((state) => state.theme); // Get theme from Redux
 
-  const [search, setSearch] = useState(""); // Search input state
-  const [searchError, setSearchError] = useState(null); // Error state for empty search
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // Toggle mobile menu
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Toggle profile dropdown
+  const [search, setSearch] = useState(""); // Search input value
+  const [searchError, setSearchError] = useState(null); // Error message for search
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // Toggle for mobile nav
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Toggle for profile dropdown
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -31,7 +31,7 @@ const Header = () => {
     return () => document.removeEventListener("click", closeDropdown);
   }, []);
 
-  // Navigate to blogs if logged in, else redirect to sign in
+  // Navigate to blogs with check for login
   const handleBlogsClick = () => {
     if (!user) {
       alert("Please log in to see blogs.");
@@ -39,13 +39,13 @@ const Header = () => {
     }
   };
 
-  // Handle search input change
+  // Update search input value
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setSearchError(null);
   };
 
-  // Handle search form submit
+  // Submit search form
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (search.trim() === "") {
@@ -57,12 +57,12 @@ const Header = () => {
     setMobileMenuOpen(false);
   };
 
-  // Toggle mobile menu
+  // Toggle hamburger menu for mobile nav
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Toggle profile dropdown
+  // Toggle user profile dropdown
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -70,7 +70,7 @@ const Header = () => {
   return (
     <header className="bg-white text-black dark:bg-black dark:text-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-y-4">
-        {/* Logo */}
+        {/* Logo section */}
         <Link
           to="/blogs"
           className="flex items-center space-x-2 text-xl font-semibold dark:text-white"
@@ -81,7 +81,7 @@ const Header = () => {
           <span>Hub</span>
         </Link>
 
-        {/* Desktop navigation links and search */}
+        {/* Desktop nav links and search */}
         <div className="hidden lg:flex items-center space-x-6">
           <Link
             to="/about"
@@ -121,7 +121,7 @@ const Header = () => {
           </form>
         </div>
 
-        {/* Right side controls */}
+        {/* Theme toggle, profile dropdown, hamburger icon */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => dispatch(toggleTheme())}
@@ -130,6 +130,7 @@ const Header = () => {
             {theme === "dark" ? <FaSun /> : <FaMoon />}
           </button>
 
+          {/* Profile or sign in */}
           {user ? (
             <div className="relative profile-dropdown">
               <button onClick={toggleDropdown}>
@@ -173,16 +174,16 @@ const Header = () => {
             </Link>
           )}
 
-          {/* Mobile menu button */}
+          {/* Hamburger icon for mobile menu */}
           <button
             onClick={toggleMobileMenu}
             className="lg:hidden px-3 py-2 bg-gradient-to-r from-violet-600 via-fuchsia-700 to-pink-500 text-white rounded-lg"
           >
-            Menu
+            <FaBars />
           </button>
         </div>
 
-        {/* Mobile menu dropdown */}
+        {/* Mobile dropdown menu */}
         {isMobileMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-900 mt-3 p-4 rounded-lg shadow-lg flex flex-col gap-3 z-20 lg:hidden">
             <Link
