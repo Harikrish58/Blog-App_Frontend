@@ -67,8 +67,11 @@ const Header = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const iconButtonStyle =
+    "p-2 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-violet-600 via-fuchsia-700 to-pink-500 text-white";
+
   return (
-    <header className="bg-white text-black dark:bg-black dark:text-white shadow-md">
+    <header className="relative bg-white text-black dark:bg-black dark:text-white shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-y-4">
         {/* Logo section */}
         <Link
@@ -125,7 +128,7 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => dispatch(toggleTheme())}
-            className="px-3 py-2 bg-gradient-to-r from-violet-600 via-fuchsia-700 to-pink-500 text-white rounded-lg"
+            className={iconButtonStyle}
           >
             {theme === "dark" ? <FaSun /> : <FaMoon />}
           </button>
@@ -133,11 +136,11 @@ const Header = () => {
           {/* Profile or sign in */}
           {user ? (
             <div className="relative profile-dropdown">
-              <button onClick={toggleDropdown}>
+              <button onClick={toggleDropdown} className={iconButtonStyle}>
                 <img
                   src={user.profilePicture}
                   alt="User Avatar"
-                  className="w-9 h-9 rounded-full border-2 border-purple-600"
+                  className="w-6 h-6 rounded-full"
                 />
               </button>
               {isDropdownOpen && (
@@ -177,61 +180,61 @@ const Header = () => {
           {/* Hamburger icon for mobile menu */}
           <button
             onClick={toggleMobileMenu}
-            className="lg:hidden px-3 py-2 bg-gradient-to-r from-violet-600 via-fuchsia-700 to-pink-500 text-white rounded-lg"
+            className={iconButtonStyle + " lg:hidden"}
           >
             <FaBars />
           </button>
         </div>
-
-        {/* Mobile dropdown menu */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white dark:bg-gray-900 mt-3 p-4 rounded-lg shadow-lg flex flex-col gap-3 z-20 lg:hidden">
-            <Link
-              to="/about"
-              className={`text-lg font-medium ${
-                path === "/about"
-                  ? "text-purple-600"
-                  : "text-gray-800 dark:text-white"
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link
-              to="/blogs"
-              className={`text-lg font-medium ${
-                path === "/blogs"
-                  ? "text-purple-600"
-                  : "text-gray-800 dark:text-white"
-              }`}
-              onClick={() => {
-                handleBlogsClick();
-                setMobileMenuOpen(false);
-              }}
-            >
-              Blogs
-            </Link>
-            <form onSubmit={handleSearchSubmit} className="flex flex-col gap-2">
-              <input
-                type="text"
-                placeholder="Search Blogs..."
-                className="px-3 py-2 rounded-lg border dark:bg-gray-800 dark:text-white dark:border-gray-600"
-                value={search}
-                onChange={handleSearchChange}
-              />
-              {searchError && (
-                <div className="text-red-500 text-sm">{searchError}</div>
-              )}
-              <button
-                type="submit"
-                className="bg-gradient-to-r from-violet-600 via-fuchsia-700 to-pink-500 text-white py-2 px-4 rounded-lg"
-              >
-                Search
-              </button>
-            </form>
-          </div>
-        )}
       </div>
+
+      {/* Mobile dropdown menu */}
+      {isMobileMenuOpen && (
+        <div className="absolute top-full left-0 right-0 z-30 bg-white dark:bg-gray-900 shadow-md rounded-b-lg p-4 flex flex-col gap-3 lg:hidden">
+          <Link
+            to="/about"
+            className={`text-lg font-medium ${
+              path === "/about"
+                ? "text-purple-600"
+                : "text-gray-800 dark:text-white"
+            }`}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            About
+          </Link>
+          <Link
+            to="/blogs"
+            className={`text-lg font-medium ${
+              path === "/blogs"
+                ? "text-purple-600"
+                : "text-gray-800 dark:text-white"
+            }`}
+            onClick={() => {
+              handleBlogsClick();
+              setMobileMenuOpen(false);
+            }}
+          >
+            Blogs
+          </Link>
+          <form onSubmit={handleSearchSubmit} className="flex flex-col gap-2">
+            <input
+              type="text"
+              placeholder="Search Blogs..."
+              className="px-3 py-2 rounded-lg border dark:bg-gray-800 dark:text-white dark:border-gray-600"
+              value={search}
+              onChange={handleSearchChange}
+            />
+            {searchError && (
+              <div className="text-red-500 text-sm">{searchError}</div>
+            )}
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-violet-600 via-fuchsia-700 to-pink-500 text-white py-2 px-4 rounded-lg"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      )}
     </header>
   );
 };
