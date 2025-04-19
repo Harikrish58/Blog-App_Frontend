@@ -146,7 +146,7 @@ const Blogs = () => {
                 {/* Author info */}
                 <div className="flex items-center space-x-3">
                   <img
-                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                     alt="Author"
                     className="w-8 h-8 rounded-full"
                   />

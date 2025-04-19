@@ -1,91 +1,87 @@
-import React, { useState, useEffect } from "react"; // Importing React and useState for handling component state
-import { FaMoon, FaSun } from "react-icons/fa"; // Importing icons for dark/light mode toggle
-import { AiOutlineSearch } from "react-icons/ai"; // Importing search icon
-import { useSelector, useDispatch } from "react-redux"; // Importing Redux hooks
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Importing React Router hooks
-import { signOutSuccess } from "../Redux/Slice/userSlice"; // Importing Redux action to handle sign-out
-import { toggleTheme } from "../Redux/Slice/themeSlice"; // Importing the toggleTheme action for dark/light mode
+import React, { useState, useEffect } from "react"; // Importing React and useState for managing component state
+import { FaMoon, FaSun } from "react-icons/fa"; // Importing components for dark/light mode toggle
+import { AiOutlineSearch } from "react-icons/ai"; // Importing component for search button
+import { useSelector, useDispatch } from "react-redux"; // Importing hooks to interact with Redux
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Importing hooks for routing
+import { signOutSuccess } from "../Redux/Slice/userSlice"; // Importing action for signing out
+import { toggleTheme } from "../Redux/Slice/themeSlice"; // Importing action to toggle light/dark theme
 
 const Header = () => {
-  const path = useLocation().pathname; // Getting the current URL path for active link highlighting
-  const dispatch = useDispatch(); // Getting the dispatch function from Redux
-  const navigate = useNavigate(); // For navigation using React Router
+  const path = useLocation().pathname; // Getting current route path
+  const dispatch = useDispatch(); // Dispatching Redux actions
+  const navigate = useNavigate(); // Navigation using React Router
 
-  const { user } = useSelector((state) => state.user); // Accessing the current user from Redux state
-  const { theme } = useSelector((state) => state.theme); // Accessing the current theme (light/dark) from Redux state
+  const { user } = useSelector((state) => state.user); // Getting current user from Redux state
+  const { theme } = useSelector((state) => state.theme); // Getting current theme from Redux state
 
-  const [search, setSearch] = useState(""); // State to manage the search input
-  const [searchError, setSearchError] = useState(null); // State for handling search errors
-  const [isMobileSearchOpen, setMobileSearchOpen] = useState(false); // State to toggle mobile search visibility
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Add state to check if the user is logged in
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to toggle the profile dropdown visibility
+  const [search, setSearch] = useState(""); // State for search input
+  const [searchError, setSearchError] = useState(null); // State to show error when search is empty
+  const [isMobileSearchOpen, setMobileSearchOpen] = useState(false); // Toggling mobile search field
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Checking if user is logged in
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Toggling profile dropdown
 
-  // Check if user is logged in
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // Check token in localStorage
     if (!token) {
-      setIsLoggedIn(false); // User is not logged in
+      setIsLoggedIn(false); // If no token, user is not logged in
     }
   }, []);
 
-  // Handle click for "Blogs" tab
+  // Redirect to sign-in page if user tries to access blogs without logging in
   const handleBlogsClick = () => {
     if (!user) {
-      // If the user is not logged in, show an alert or message and redirect them to sign in page
-      alert("Please log in to see blogs.");
-      navigate("/signin"); // Redirect to the sign-in page
+      alert("Please log in to see blogs."); // Show alert if user not logged in
+      navigate("/signin"); // Redirect to sign-in page
     }
   };
 
-  // Handle the change in the search input
+  // Update search input value
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-    setSearchError(null); // Reset search error on input change
+    setSearch(e.target.value); // Update search state
+    setSearchError(null); // Clear any error
   };
 
-  // Handle the form submission for search
+  // Submit search form
   const handleSearchSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload
     if (search.trim() === "") {
-      setSearchError("Please enter a search term.");
+      setSearchError("Please enter a search term."); // Show error if empty
       return;
     }
-    setSearchError(null);
-    navigate(`/blogs?search=${search}`); // Navigate to the blogs page with search query
-    setSearch(""); // Reset search input
-    setMobileSearchOpen(false); // Close the mobile search input if open
+    navigate(`/blogs?search=${search}`); // Navigate to blogs page with search query
+    setSearch(""); // Clear input
+    setMobileSearchOpen(false); // Close mobile search field
   };
 
-  // Mobile Search Toggle
+  // Toggle mobile search field
   const handleMobileSearchToggle = () => {
-    setMobileSearchOpen(!isMobileSearchOpen);
-    setSearch(""); // Clear search input when toggling search visibility
-    setSearchError(null); // Clear search error
+    setMobileSearchOpen(!isMobileSearchOpen); // Open or close the search field
+    setSearch(""); // Clear search input
+    setSearchError(null); // Clear any error
   };
 
-  // Toggle Profile Dropdown Visibility
+  // Toggle profile dropdown
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown visibility
+    setIsDropdownOpen(!isDropdownOpen); // Open or close dropdown
   };
 
-  // Close the dropdown if clicked outside
+  // Close dropdown when clicked outside
   const closeDropdown = (e) => {
     if (!e.target.closest(".profile-dropdown")) {
-      setIsDropdownOpen(false);
+      setIsDropdownOpen(false); // Close dropdown if click outside
     }
   };
 
-  // Add event listener for clicking outside of the dropdown
   useEffect(() => {
-    document.addEventListener("click", closeDropdown);
+    document.addEventListener("click", closeDropdown); // Listen for outside clicks
     return () => {
-      document.removeEventListener("click", closeDropdown);
+      document.removeEventListener("click", closeDropdown); // Cleanup
     };
   }, []);
 
   return (
     <header className="bg-white text-black dark:bg-black dark:text-white shadow-md">
-      <div className="max-w-screen-xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="max-w-screen-xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
         {/* Logo and App name */}
         <Link
           to="/blogs"
@@ -97,8 +93,8 @@ const Header = () => {
           <span>Hub</span>
         </Link>
 
-        {/* Links: About, Blogs */}
-        <div className="flex space-x-6">
+        {/* Navigation links */}
+        <div className="hidden md:flex space-x-6">
           <Link
             to="/about"
             className={`text-lg font-medium ${
@@ -116,27 +112,29 @@ const Header = () => {
                 ? "text-purple-600"
                 : "text-gray-800 dark:text-white"
             }`}
-            onClick={handleBlogsClick} // Handle click for Blogs
+            onClick={handleBlogsClick}
           >
             Blogs
           </Link>
         </div>
 
-        {/* Mobile Search Button */}
+        {/* Mobile search toggle */}
         <div className="lg:hidden flex items-center gap-2">
           <button
             className={`${
               isMobileSearchOpen ? "hidden" : ""
-            } bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800`}
+            } bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded-lg`}
             onClick={handleMobileSearchToggle}
           >
             <AiOutlineSearch />
           </button>
 
-          {/* Mobile Search Input */}
+          {/* Mobile search input */}
           <form
             onSubmit={handleSearchSubmit}
-            className={`${isMobileSearchOpen ? "flex" : "hidden"} items-center gap-2 w-full`}
+            className={`${
+              isMobileSearchOpen ? "flex" : "hidden"
+            } items-center gap-2 w-full`}
           >
             <div className="relative w-full">
               <input
@@ -160,7 +158,7 @@ const Header = () => {
           </form>
         </div>
 
-        {/* Desktop Search Form */}
+        {/* Search form (desktop) */}
         <form
           onSubmit={handleSearchSubmit}
           className="hidden md:flex items-center w-1/3"
@@ -185,18 +183,17 @@ const Header = () => {
           </button>
         </form>
 
-        {/* Right-side buttons */}
+        {/* Right side buttons */}
         <div className="flex items-center gap-4">
-          {/* Theme Toggle Button */}
+          {/* Theme toggle button */}
           <button
-            onClick={() => dispatch(toggleTheme())} // Toggle theme on button click
+            onClick={() => dispatch(toggleTheme())}
             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-lg"
           >
-            {theme === "dark" ? <FaSun /> : <FaMoon />}{" "}
-            {/* Display Sun for dark mode and Moon for light mode */}
+            {theme === "dark" ? <FaSun /> : <FaMoon />}
           </button>
 
-          {/* Profile/Sign In Button */}
+          {/* Profile dropdown or Sign In button */}
           {user ? (
             <div className="relative profile-dropdown">
               <button className="flex items-center" onClick={toggleDropdown}>
@@ -223,7 +220,7 @@ const Header = () => {
                   <button
                     onClick={() => {
                       localStorage.removeItem("token");
-                      window.location.href = "/signin"; // Redirect to sign-in page
+                      window.location.href = "/signin";
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
