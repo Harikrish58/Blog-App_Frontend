@@ -95,8 +95,8 @@ const SingleBlog = () => {
 
             <div className="flex items-center space-x-4 mb-4">
               <img
-                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                alt="user avatar"
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                alt="author"
                 className="w-10 h-10 rounded-full"
               />
               <span className="text-sm font-medium text-gray-900 dark:text-white">
