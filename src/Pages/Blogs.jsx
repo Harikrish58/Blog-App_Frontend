@@ -116,11 +116,14 @@ const Blogs = () => {
               className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300 cursor-pointer"
               onClick={() => handleClick(blog._id)}
             >
-              <img
-                src={blog.image}
-                alt={blog.title}
-                className="w-full h-48 object-cover"
-              />
+              <div className="w-full h-48 flex items-center justify-center bg-white p-4">
+                <img
+                  src={blog.image}
+                  alt={blog.title}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+
               <div className="p-4">
                 {/* Category badge and date */}
                 <div className="flex justify-between items-center mb-3">
