@@ -74,12 +74,6 @@ const About = () => {
           DevHub delivers a seamless experience with modern UI and dark mode
           support.
         </p>
-
-        {/* Footer text */}
-        <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-          &copy; {new Date().getFullYear()} DevHub. Fuel your curiosity. Share
-          your voice.
-        </p>
       </div>
     </div>
   );

@@ -142,9 +142,10 @@ const Blogs = () => {
                 </h2>
 
                 {/* Excerpt */}
-                <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-3 mb-4">
-                  {blog.content}
-                </p>
+                <div
+                  className="text-gray-700 dark:text-gray-400 text-sm line-clamp-3 mb-4"
+                  dangerouslySetInnerHTML={{ __html: blog.content }}
+                />
 
                 {/* Author info */}
                 <div className="flex items-center space-x-3">
